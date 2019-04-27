@@ -1,6 +1,28 @@
-## test test
-* work1
-* work2
+Access to GMrepo using python2 through RESTful APIs
+
+## Table of contents
+<!-- MDTOC maxdepth:6 firsth1:1 numbering:0 flatten:0 bullets:1 updateOnSave:1 -->
+
+   - [Table of contents](#table-of-contents)   
+   - [Install and load required libraries](#install-and-load-required-libraries)   
+   - [Phenotypes](#phenotypes)   
+      - [Get all phenotypes and statistics](#get-all-phenotypes-and-statistics)   
+      - [Get statistics on a phenotype](#get-statistics-on-a-phenotype)   
+      - [Get associated species of a phenotype](#get-associated-species-of-a-phenotype)   
+      - [Get associated genera of a phenotype](#get-associated-genera-of-a-phenotype)   
+      - [Calculate species/genera prevalence](#calculate-speciesgenera-prevalence)   
+      - [Get associated projects](#get-associated-projects)   
+      - [Get associated runs](#get-associated-runs)   
+      - [Get relative species/genus abundances in samples/runs associated with a phenotype](#get-relative-speciesgenus-abundances-in-samplesruns-associated-with-a-phenotype)   
+   - [Species/genera](#speciesgenera)   
+      - [Get an overview of the species/genera](#get-an-overview-of-the-speciesgenera)   
+      - [Get summary information of the prevalence and relative abundance of a species/genus in all associated phenotypes](#get-summary-information-of-the-prevalence-and-relative-abundance-of-a-speciesgenus-in-all-associated-phenotypes)   
+      - [Get detailed information of the prevalence and relative abundance of a species/genus in all associated phenotypes](#get-detailed-information-of-the-prevalence-and-relative-abundance-of-a-speciesgenus-in-all-associated-phenotypes)   
+      - [Get relative species/genus abundances for a sample/run](#get-relative-speciesgenus-abundances-for-a-samplerun)   
+   - [Projects and runs](#projects-and-runs)   
+
+<!-- /MDTOC -->
+
 ## Install required modules
 Please install the following required modules:
 ```python2
@@ -131,27 +153,221 @@ phenotyp_assoc_genera = DataFrame(pheno_04.json())
 list(phenotyp_assoc_genera)
 ```
 ### Calculate species/genera prevalence
-**Prevalence** refers to the percentage of runs in which a species/genus is found out of the total number of valid runs; the latter can be found in `phenotyp_stats$stats$nr_valid_samples``phenotyp_stats.ix['nr_valid_samples']`.
-```R
+**Prevalence** refers to the percentage of runs in which a species/genus is found out of the total number of valid runs the latter can be found in `phenotyp_stats.stats.ix['nr_valid_samples']`.
+```python2
 ## calculate species/genera prevalence for all species associated with Health (D006262):
-phenotyp_assoc_species$species_prevalence <- phenotyp_assoc_species$samples / phenotyp_stats$stats$nr_valid_samples * 100;
+species_prevalence = phenotyp_assoc_species.samples / phenotyp_stats.stats.ix['nr_valid_samples'] * 100
 
-## then plot
-plot( density( phenotyp_assoc_species$species_prevalence ) );
+## then plot (if you have GUI)
+species_prevalence.plot(kind='density')
 
 ## calculate species prevalence for all genera associated with Health (D006262):
-phenotyp_assoc_genera$genus_prevalence <- phenotyp_assoc_genera$samples / phenotyp_stats$stats$nr_valid_samples * 100;
+genus_prevalence <- phenotyp_assoc_genera.samples / phenotyp_stats.stats.ix['nr_valid_samples'] * 100
 
-## then plot
-plot( density( phenotyp_assoc_genera$genus_prevalence ) );
-```
-Users can also use the above data to find, for example, the top 10 most prevalent species/genera:
-```R
-if( !requireNamespace("dplyr") ){
-    install.packages( "dplyr" );
-}
-require(dplyr);
+## then plot (if you have GUI)
+genus_prevalence.plot(kind='density')
 
-## -- sort by species_prevalence in decreasing order and select the top 10
-phenotyp_assoc_species %>% arrange( desc( species_prevalence ) ) %>% top_n( 10 );
+## if you don't have GUI
+import matplotlib.pyplot as plt
+plt.switch_backend('agg')
+fig = species_prevalence.plot(kind='density').get_figure()
+fig.savefig('species_prevalence.png')
 ```
+### Get associated projects
+
+`input`: a MeSH ID,
+
+`output`: a `data.frame`
+```python2
+## -- all associted projects --
+pheno_05_query = {'mesh_id':'D006262'}
+url = 'http://gmrepo.humangut.info/api/getAssociatedProjectsByMeshID'
+pheno_05 = requests.post(url, data=json.dumps(pheno_05_query))
+pheno_05_cont = pheno_05.json()
+
+## --get DataFrame
+phenotyp_assoc_pros = DataFrame(pheno_05.json())
+
+## --show data header of the resulting DataFrame
+list(phenotyp_assoc_pros)
+```
+Please note very often a project may contain samples/runs of multiple phenotypes.
+
+### Get associated runs
+Some phenotypes are associated with tens of thousands of runs (e.g. `Health (D006262)`) that are too many to be retrieved with one call. Therefore it may take a two-step procedure to retrieve all runs associated with phenotype.
+
+First, count the number of runs associated with a phenotype:
+
+`input`: a MeSH ID,
+
+`output`: a `vector`
+```python2
+## -- count associated runs --
+pheno_06_query = {'mesh_id':'D006262'}  
+url = 'http://gmrepo.humangut.info/api/countAssociatedRunsByPhenotypeMeshID'
+pheno_06 = requests.post(url, data=json.dumps(pheno_06_query))
+pheno_06_cont = pheno_06.json()
+
+## -- the resulting variable is a vector --
+phenotyp_nr_assoc_runs = DataFrame(pheno_06.json())
+print(phenotyp_nr_assoc_runs)
+```
+
+Then users can use a loop retrieve the associated runs, 100 runs at a time:
+
+`input`: a MeSH ID, the number of records to skip, the number of records to retrieve; see below.
+
+`output`: a `data.frame`
+```python2
+## -- get all associted runs --
+## use skip = 0, limit = 100 to retrieve the first 100 runs, then
+##     skip = 100, limit = 100 to retrieve the next 100 runs ....
+
+pheno_07_query = {'mesh_id':'D006262',"skip":0, "limit":100}  
+url = 'http://gmrepo.humangut.info/api/getAssociatedRunsByPhenotypeMeshIDLimit'
+pheno_07 = requests.post(url, data=json.dumps(pheno_07_query))
+pheno_07_cont = pheno_07.json()
+
+## -- the resulting variable is a vector --
+phenotyp_a_page_of_assoc_runs = DataFrame(pheno_07.json())
+print(phenotyp_a_page_of_assoc_runs)
+```
+### Get relative species/genus abundances in samples/runs associated with a phenotype
+To get the related information, two input parameters are required:
+* MeSH ID of interests, e.g. `D003093` for `Colitis, Ulcerative`
+* NCBI taxonomy ID of the species/genus of interests, e.g. `40520` for `Blautia obeum (species)`.
+
+```python2
+data_query = {'mesh_id':'D003093',"ncbi_taxon_id" : "40520"}  ## -- to get statistics on MeSH ID D006262
+url = 'http://gmrepo.humangut.info/api/getMicrobeAbundancesByPhenotypeMeshIDAndNCBITaxonID'
+data = requests.post(url, data=json.dumps(data_query))
+
+## --get DataFrames
+hist_data_for_phenotype = DataFrame(data.json().get('hist_data_for_phenotype'))
+list(hist_data_for_phenotype)
+```
+The resulting `data` is a list containing:
+* `hist_data_for_phenotype`: a data frame contains the distribution of the relative abundances of the species/genus of interests in all samples of current phenotype,
+* `hist_data_for_health`: if current phenotype is not `Health`, the  distribution of the relative abundances of the species/genus of interests in all samples of `Health` will also be retrieved,
+* `abundant_data_for_disease`: a numeric vector contains the relative abundance data of the species/genus of interests in all samples of current phenotype,
+* `abundant_data_for_health`: if current phenotype is not `Health`, the relative abundances of the species/genus of interests in all samples of `Health` will also be retrieved,
+* `taxon`: NCBI taxonomy information for current taxonomy ID,
+* `disease`: details of current phenotype,
+* `abundance_and_meta_data`: runs in which current taxon is found and related meta data,
+* `co_occurred_taxa`: cooccurred taxa of the taxon of interests in current phenotype
+
+See http://gmrepo.humangut.info/phenotypes/D003093/40520 for more details.
+
+## Species/genera
+### Get an overview of the species/genera
+
+`input`: none,
+
+`output`: a `list`.
+```python2
+### --- get all species and genera that presented in >= 2 runs with median relative abundance >= 0.01%
+url = 'http://gmrepo.humangut.info/api/get_all_gut_microbes'
+data = requests.post(url, data={}).json()
+
+## --get DataFrames
+all_species = DataFrame(data.get('all_species'))
+list(all_species)
+```
+The retrieved `data` is a list containing:
+* `all_species`: a `data.frame` that contains all species that presented in >= 2 runs with median relative abundance >= 0.01%,
+* `all_genus`: a `data.frame` that contains all genera that presented in >= 2 runs with median relative abundance >= 0.01%,
+* `metadata`: a list contains additional statistics:
+  * `loaded_samples`: nr. qualified runs for which the relative abundance data are available,
+  * `all_species_count`: nr. all species
+  * `retrieved_species_count`: nr. species in the `data.frame`: `all_species`,
+  * `all_genus_count`: nr. all genera,
+  * `retrieved_genus_count`: nr. genera in the `data.frame`: `all_genus`.
+
+With the retrieved data, users can plot the **species prevalence in phenotypes** and **species prevalence in samples**, as shown below:
+```python2
+## IF YOU HAVE GUI!!
+## -- species prevalence in samples
+DataFrame(data.get('all_species')).pct_of_all_samples.plot(kind='density')
+
+## -- genus prevalence in samples
+DataFrame(data.get('all_genus')).pct_of_all_samples.plot(kind='density')
+
+## -- species prevalence in phenotypes --
+DataFrame(data.get('all_species')).nr_phenotypes.plot(kind='density')
+
+## -- genus prevalence in phenotypes --
+DataFrame(data.get('all_genu')).nr_phenotypes.plot(kind='density')
+
+## if you don't have GUI
+import matplotlib.pyplot as plt
+plt.switch_backend('agg')
+fig = DataFrame(data.get('all_species')).pct_of_all_samples.plot(kind='density').get_figure()
+fig.savefig('species_pct_of_all_samples.png')
+```
+
+See http://gmrepo.humangut.info/species for more details.
+
+### Get summary information of the prevalence and relative abundance of a species/genus in all associated phenotypes
+
+`data input`: ncbi taxonomy id of a species/genus,
+
+`data output`: a `data.frame`
+```python2
+query = {"ncbi_taxon_id":40520}  
+url = 'http://gmrepo.humangut.info/api/getPhenotypesAndAbundanceSummaryOfAAssociatedTaxon'
+data = DataFrame(requests.post(url, data=json.dumps(query)).json().get('phenotypes_associated_with_taxon'))
+```
+
+See the first table at http://gmrepo.humangut.info/species/40520 for details.
+
+### Get detailed information of the prevalence and relative abundance of a species/genus in all associated phenotypes
+
+`data input`: ncbi taxonomy id of a species/genus,
+
+`data output`: a bunch of `DataFrames`
+```python2
+query = {"ncbi_taxon_id":40520}  
+url = 'http://gmrepo.humangut.info/api/getAssociatedPhenotypesAndAbundancesOfATaxon'
+data = requests.post(url, data=json.dumps(query)).json()
+
+## --get DataFrames
+phenotypes_associated_with_taxon = DataFrame(data.get("phenotypes_associated_with_taxon"))
+taxon = DataFrame(data.get("taxon"))
+density_data_groupped = DataFrame(data.get("density_data_groupped"))
+```
+The retrieved `data` is a list containing:
+* `phenotypes_associated_with_taxon`: a `data.frame` contains summary information on associated phenotypes,
+* `taxon`: a list contains detailed information about this taxon, such as scientific name and taxonomic level,
+* `density_data_groupped`: a list of `data.frame`, each contains abundance information of the current taxon in an associated phenotype; the number of `data.frame` corresponds to the number of phenotypes the current taxon is associated with.
+
+The retrieved data can be used to generate the plots at http://gmrepo.humangut.info/species/40520.
+
+### Get relative species/genus abundances for a sample/run
+
+`input`: run ID, e.g. `ERR475468`,
+
+`output`: a list, see below:
+```python2
+query = {"run_id":"ERR475468"}  
+url = 'http://gmrepo.humangut.info/api/getRunDetailsByRunID'
+data = requests.post(url, data=json.dumps(query)).json()
+
+## --get run List
+run = data.get("run")
+
+## --get DataFrames
+species = DataFrame(data.get("species"))
+genus = DataFrame(data.get("genus"))
+```
+The retrieved `data` is a `list` containing:
+* `run`: a `list` contains run metadata,
+* `species`: a `data.frame` contains relative abundances of all species,
+* `genus`: a `data.frame` contains relative abundances of all genera.
+
+See http://gmrepo.humangut.info/data/run/ERR475468 for details.
+
+## Projects and runs
+Although it is possible to download projects and runs through our RESTful API, it is highly recommended to download them from our website, or use the following URLs:
+* download all projects: http://gmrepo.humangut.info/Downloads/AllSummaryData/all_projects_metadata.tsv.gz,
+* download all runs associated with a project: http://gmrepo.humangut.info/Downloads/RunsByProjectID/all_runs_in_project_PRJEB6070.tsv.gz; please replace `PRJEB6070` with any other project ID of interests,
+* other downloads please consult the `Data downloads` section of the Help page: http://gmrepo.humangut.info/help.
