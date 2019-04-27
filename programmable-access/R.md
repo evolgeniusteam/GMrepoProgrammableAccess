@@ -1,3 +1,26 @@
+## Table of contents
+<!-- MDTOC maxdepth:6 firsth1:1 numbering:0 flatten:0 bullets:1 updateOnSave:1 -->
+
+   - [Table of contents](#table-of-contents)   
+   - [Install and load required libraries](#install-and-load-required-libraries)   
+   - [Phenotypes](#phenotypes)   
+      - [Get all phenotypes and statistics](#get-all-phenotypes-and-statistics)   
+      - [Get statistics on a phenotype](#get-statistics-on-a-phenotype)   
+      - [Get associated species of a phenotype](#get-associated-species-of-a-phenotype)   
+      - [Get associated genera of a phenotype](#get-associated-genera-of-a-phenotype)   
+      - [Calculate species/genera prevalence](#calculate-speciesgenera-prevalence)   
+      - [Get associated projects](#get-associated-projects)   
+      - [Get associated runs](#get-associated-runs)   
+      - [Get relative species/genus abundances in samples/runs associated with a phenotype](#get-relative-speciesgenus-abundances-in-samplesruns-associated-with-a-phenotype)   
+   - [Species/genera](#speciesgenera)   
+      - [Get an overview of the species/genera](#get-an-overview-of-the-speciesgenera)   
+      - [Get summary information of the prevalence and relative abundance of a species/genus in all associated phenotypes](#get-summary-information-of-the-prevalence-and-relative-abundance-of-a-speciesgenus-in-all-associated-phenotypes)   
+      - [Get detailed information of the prevalence and relative abundance of a species/genus in all associated phenotypes](#get-detailed-information-of-the-prevalence-and-relative-abundance-of-a-speciesgenus-in-all-associated-phenotypes)   
+      - [Get relative species/genus abundances for a sample/run](#get-relative-speciesgenus-abundances-for-a-samplerun)   
+   - [Projects and runs](#projects-and-runs)   
+
+<!-- /MDTOC -->
+
 ## Install and load required libraries
 Please install the following required libraries:
 ```R
