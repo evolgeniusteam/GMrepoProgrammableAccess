@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 Access to GMrepo using python2 through RESTful APIs
 
 ## Table of contents
@@ -25,7 +24,7 @@ Access to GMrepo using python2 through RESTful APIs
 <!-- /MDTOC -->
 
 =======
->>>>>>> 552ffe29e806690007f17ca3eb73d9cf5411a79d
+
 ## Install required modules
 Please install the following required modules:
 ```python2
