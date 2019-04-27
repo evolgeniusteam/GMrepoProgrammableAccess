@@ -30,6 +30,7 @@ require("xml2");
 ## Phenotypes
 ### Get all phenotypes and statistics
 `input`: none,
+
 `output`: a `list`
 ```R
 ### -- get all phenotypes  --
@@ -50,6 +51,7 @@ Using the corresponding MeSH ID  (e.g. `D006262` for `Health `), uses can first 
 * and other information
 
 `input`: a MeSH ID,
+
 `output`: a `list`
 ```R
 ## -- get summary information by mesh_id
@@ -63,7 +65,9 @@ str(phenotyp_stats);
 ```
 ### Get associated species of a phenotype
 Again the MeSH ID `D006262` will be needed as the input:
+
 `input`: a MeSH ID,
+
 `output`: a `data.frame`
 ```R
 ## -- all associted species --
@@ -78,6 +82,7 @@ head( phenotyp_assoc_species );
 
 ### Get associated genera of a phenotype
 `input`: a MeSH ID,
+
 `output`: a `data.frame`
 ```R
 ## -- all associted genera --
@@ -117,7 +122,9 @@ phenotyp_assoc_species %>% arrange( desc( species_prevalence ) ) %>% top_n( 10 )
 ```
 
 ### Get associated projects
+
 `input`: a MeSH ID,
+
 `output`: a `data.frame`
 ```R
 ## -- all associted projects --
@@ -134,7 +141,9 @@ Please note very often a project may contain samples/runs of multiple phenotypes
 Some phenotypes are associated with tens of thousands of runs (e.g. `Health (D006262)`) that are too many to be retrieved with one call. Therefore it may take a two-step procedure to retrieve all runs associated with phenotype.
 
 First, count the number of runs associated with a phenotype:
+
 `input`: a MeSH ID,
+
 `output`: a `vector`
 ```R
 ## -- count associated runs --
@@ -147,7 +156,9 @@ head( phenotyp_nr_assoc_runs );
 ```
 
 Then users can use a loop retrieve the associated runs, 100 runs at a time:
+
 `input`: a MeSH ID, the number of records to skip, the number of records to retrieve; see below.
+
 `output`: a `data.frame`
 ```R
 ## -- get all associted runs --
@@ -166,6 +177,7 @@ head( phenotyp_a_page_of_assoc_runs );
 To get the related information, two input parameters are required:
 * MeSH ID of interests, e.g. `D003093` for `Colitis, Ulcerative`
 * NCBI taxonomy ID of the species/genus of interests, e.g. `40520` for `Blautia obeum (species)`.
+
 ```R
 params <- list( "mesh_id" = "D003093", "ncbi_taxon_id" = "40520" );
 query <- POST("http://gmrepo.humangut.info/api/getMicrobeAbundancesByPhenotypeMeshIDAndNCBITaxonID", body = params, encode = "json");
@@ -189,7 +201,9 @@ See http://gmrepo.humangut.info/phenotypes/D003093/40520 for more details.
 
 ## Species/genera
 ### Get an overview of the species/genera
+
 `input`: none,
+
 `output`: a `list`.
 ```R
 ### --- get all species and genera that presented in >= 2 runs with median relative abundance >= 0.01%
@@ -228,7 +242,9 @@ plot(density( data$all_genus$nr_phenotypes ));
 See http://gmrepo.humangut.info/species for more details.
 
 ### Get summary information of the prevalence and relative abundance of a species/genus in all associated phenotypes
+
 `data input`: ncbi taxonomy id of a species/genus,
+
 `data output`: a `data.frame`
 ```R
 query <- POST("http://gmrepo.humangut.info/api/getPhenotypesAndAbundanceSummaryOfAAssociatedTaxon", body = list( "ncbi_taxon_id" = 40520 ), encode = "json");
@@ -242,7 +258,9 @@ head(data);
 See the first table at http://gmrepo.humangut.info/species/40520 for details.
 
 ### Get detailed information of the prevalence and relative abundance of a species/genus in all associated phenotypes
+
 `data input`: ncbi taxonomy id of a species/genus,
+
 `data output`: a `list`
 ```R
 query <- POST("http://gmrepo.humangut.info/api/getAssociatedPhenotypesAndAbundancesOfATaxon", body = list( "ncbi_taxon_id" = 40520 ), encode = "json");
@@ -260,7 +278,9 @@ The retrieved `data` is a list containing:
 The retrieved data can be used to generate the plots at http://gmrepo.humangut.info/species/40520.
 
 ### Get relative species/genus abundances for a sample/run
+
 `input`: run ID, e.g. `ERR475468`,
+
 `output`: a list, see below:
 ```R
 query <- POST("http://gmrepo.humangut.info/api/getRunDetailsByRunID", body = list( "run_id" = "ERR475468" ), encode = "json");
