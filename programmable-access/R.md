@@ -48,6 +48,7 @@ Using the corresponding MeSH ID  (e.g. `D006262` for `Health `), uses can first 
 * nr of associated species/genera
 * nr of total/processed/qualified runs
 * and other information
+
 `input`: a MeSH ID,
 `output`: a `list`
 ```R
