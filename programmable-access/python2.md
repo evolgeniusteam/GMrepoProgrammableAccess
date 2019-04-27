@@ -1,6 +1,3 @@
-## test test
-* work1
-* work2
 ## Install required modules
 Please install the following required modules:
 ```python2
