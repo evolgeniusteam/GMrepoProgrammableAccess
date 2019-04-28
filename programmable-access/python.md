@@ -75,7 +75,7 @@ pip install requests
 pip install json
 pip install pandas
 ```
-Load required libraries:
+Load required modules:
 ```python
 import requests
 import json
