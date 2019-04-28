@@ -13,5 +13,4 @@ In addition to the online database, [**GMrepo**](http://gmrepo.humangut.info/hom
 
 * [R](programmable-access/R.md)
 * [Perl](programmable-access/perl.md)
-* [Python 2](programmable-access/python2.md)
-* [Python 3](programmable-access/python3.md)
+* [Python](programmable-access/python2.md)
