@@ -1,4 +1,4 @@
-Access to GMrepo using python2 through RESTful APIs
+Access to GMrepo using python through RESTful APIs
 
 ## Table of contents
 <!-- MDTOC maxdepth:6 firsth1:1 numbering:0 flatten:0 bullets:1 updateOnSave:1 -->
@@ -27,7 +27,7 @@ Access to GMrepo using python2 through RESTful APIs
 
 ## Install required modules
 Please install the following required modules:
-```python2
+```python
 ## --install requests
 import os
 count = 2
@@ -76,7 +76,7 @@ pip install json
 pip install pandas
 ```
 Load required libraries:
-```python2
+```python
 import requests
 import json
 from pandas.core.frame import DataFrame
@@ -87,7 +87,7 @@ from pandas.core.frame import DataFrame
 `input`: none,
 
 `output`: a `DataFrame`
-```python2
+```python
 ### -- get all phenotypes  --
 url = 'http://gmrepo.humangut.info/api/get_all_phenotypes'
 pheno_01 = requests.post(url, data={})
@@ -109,7 +109,7 @@ Using the corresponding MeSH ID  (e.g. `D006262` for `Health `), uses can first 
 `input`: a MeSH ID,
 
 `output`: a `DataFrame`
-```python2
+```python
 ## -- get summary information by mesh_id
 pheno_02_query = {'mesh_id':'D006262'}  ## -- to get statistics on MeSH ID D006262
 url = 'http://gmrepo.humangut.info/api/getStatisticsByProjectsByMeshID'
@@ -125,7 +125,7 @@ Again the MeSH ID `D006262` will be needed as the input:
 `input`: a MeSH ID,
 
 `output`: a `data.frame`
-```python2
+```python
 pheno_03_query = {'mesh_id':'D006262'}  ## -- to get statistics on MeSH ID D006262
 url = 'http://gmrepo.humangut.info/api/getAssociatedSpeciesByMeshID'
 pheno_03 = requests.post(url, data=json.dumps(pheno_03_query))
@@ -142,7 +142,7 @@ list(phenotyp_assoc_species)
 `input`: a MeSH ID,
 
 `output`: a `data.frame`
-```python2
+```python
 pheno_04_query = {'mesh_id':'D006262'}  ## -- to get statistics on MeSH ID D006262
 url = 'http://gmrepo.humangut.info/api/getAssociatedGeneraByMeshID'
 pheno_04 = requests.post(url, data=json.dumps(pheno_04_query))
@@ -156,7 +156,7 @@ list(phenotyp_assoc_genera)
 ```
 ### Calculate species/genera prevalence
 **Prevalence** refers to the percentage of runs in which a species/genus is found out of the total number of valid runs the latter can be found in `phenotyp_stats.stats.ix['nr_valid_samples']`.
-```python2
+```python
 ## calculate species/genera prevalence for all species associated with Health (D006262):
 species_prevalence = phenotyp_assoc_species.samples / phenotyp_stats.stats.ix['nr_valid_samples'] * 100
 
@@ -180,7 +180,7 @@ fig.savefig('species_prevalence.png')
 `input`: a MeSH ID,
 
 `output`: a `data.frame`
-```python2
+```python
 ## -- all associted projects --
 pheno_05_query = {'mesh_id':'D006262'}
 url = 'http://gmrepo.humangut.info/api/getAssociatedProjectsByMeshID'
@@ -203,7 +203,7 @@ First, count the number of runs associated with a phenotype:
 `input`: a MeSH ID,
 
 `output`: a `vector`
-```python2
+```python
 ## -- count associated runs --
 pheno_06_query = {'mesh_id':'D006262'}  
 url = 'http://gmrepo.humangut.info/api/countAssociatedRunsByPhenotypeMeshID'
@@ -220,7 +220,7 @@ Then users can use a loop retrieve the associated runs, 100 runs at a time:
 `input`: a MeSH ID, the number of records to skip, the number of records to retrieve; see below.
 
 `output`: a `data.frame`
-```python2
+```python
 ## -- get all associted runs --
 ## use skip = 0, limit = 100 to retrieve the first 100 runs, then
 ##     skip = 100, limit = 100 to retrieve the next 100 runs ....
@@ -239,7 +239,7 @@ To get the related information, two input parameters are required:
 * MeSH ID of interests, e.g. `D003093` for `Colitis, Ulcerative`
 * NCBI taxonomy ID of the species/genus of interests, e.g. `40520` for `Blautia obeum (species)`.
 
-```python2
+```python
 data_query = {'mesh_id':'D003093',"ncbi_taxon_id" : "40520"}  ## -- to get statistics on MeSH ID D006262
 url = 'http://gmrepo.humangut.info/api/getMicrobeAbundancesByPhenotypeMeshIDAndNCBITaxonID'
 data = requests.post(url, data=json.dumps(data_query))
@@ -266,7 +266,7 @@ See http://gmrepo.humangut.info/phenotypes/D003093/40520 for more details.
 `input`: none,
 
 `output`: a `list`.
-```python2
+```python
 ### --- get all species and genera that presented in >= 2 runs with median relative abundance >= 0.01%
 url = 'http://gmrepo.humangut.info/api/get_all_gut_microbes'
 data = requests.post(url, data={}).json()
@@ -286,7 +286,7 @@ The retrieved `data` is a list containing:
   * `retrieved_genus_count`: nr. genera in the `data.frame`: `all_genus`.
 
 With the retrieved data, users can plot the **species prevalence in phenotypes** and **species prevalence in samples**, as shown below:
-```python2
+```python
 ## IF YOU HAVE GUI!!
 ## -- species prevalence in samples
 DataFrame(data.get('all_species')).pct_of_all_samples.plot(kind='density')
@@ -314,7 +314,7 @@ See http://gmrepo.humangut.info/species for more details.
 `data input`: ncbi taxonomy id of a species/genus,
 
 `data output`: a `data.frame`
-```python2
+```python
 query = {"ncbi_taxon_id":40520}  
 url = 'http://gmrepo.humangut.info/api/getPhenotypesAndAbundanceSummaryOfAAssociatedTaxon'
 data = DataFrame(requests.post(url, data=json.dumps(query)).json().get('phenotypes_associated_with_taxon'))
@@ -327,7 +327,7 @@ See the first table at http://gmrepo.humangut.info/species/40520 for details.
 `data input`: ncbi taxonomy id of a species/genus,
 
 `data output`: a bunch of `DataFrames`
-```python2
+```python
 query = {"ncbi_taxon_id":40520}  
 url = 'http://gmrepo.humangut.info/api/getAssociatedPhenotypesAndAbundancesOfATaxon'
 data = requests.post(url, data=json.dumps(query)).json()
@@ -349,7 +349,7 @@ The retrieved data can be used to generate the plots at http://gmrepo.humangut.i
 `input`: run ID, e.g. `ERR475468`,
 
 `output`: a list, see below:
-```python2
+```python
 query = {"run_id":"ERR475468"}  
 url = 'http://gmrepo.humangut.info/api/getRunDetailsByRunID'
 data = requests.post(url, data=json.dumps(query)).json()
