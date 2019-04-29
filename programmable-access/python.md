@@ -70,11 +70,16 @@ while count:
         count -= 1
         continue
 
+```
+
+```bash
 ## -- simply install all of them without checking:
+## run in your terminal --
 pip install requests
 pip install json
 pip install pandas
 ```
+
 Load required modules:
 ```python
 import requests
