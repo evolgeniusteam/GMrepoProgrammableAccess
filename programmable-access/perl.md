@@ -59,6 +59,11 @@ use JSON;
 use Data::Dumper;
 ```
 
+Declare a variable:
+```Perl
+my $ua = LWP::UserAgent->new;
+```
+
 ## Phenotypes
 ### Get all phenotypes and statistics
 
