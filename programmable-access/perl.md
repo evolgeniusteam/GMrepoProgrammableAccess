@@ -4,7 +4,7 @@ Access to GMrepo using Perl through RESTful APIs
 <!-- MDTOC maxdepth:6 firsth1:1 numbering:0 flatten:0 bullets:1 updateOnSave:1 -->
 
    - [Table of contents](#table-of-contents)   
-   - [Install and load required module](#install-and-load-required-module)   
+   - [Install and load required modules](#install-and-load-required-modules)   
    - [Phenotypes](#phenotypes)   
       - [Get all phenotypes and statistics](#get-all-phenotypes-and-statistics)   
       - [Get statistics on a phenotype](#get-statistics-on-a-phenotype)   
@@ -23,8 +23,8 @@ Access to GMrepo using Perl through RESTful APIs
 
 <!-- /MDTOC -->
 
-## Install and load required module
-Please install the following required module:
+## Install and load required modules
+Please install the following required modules:
 ```Shell
 ## -- if you are using Debian Linux, following is the recommended way.
 ## -- start CPAN shell
@@ -49,7 +49,7 @@ cpan> install Data::Dumper
 cpan> q
 ```
 
-Load required module:
+Load required modules:
 ```Perl
 #!usr/bin/perl      -w
 use HTTP::Request;
