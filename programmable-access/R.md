@@ -59,7 +59,7 @@ require("xml2");
 `output`: a `list`
 ```R
 ### -- get all phenotypes  --
-pheno_01 <- POST("http://gmrepo.humangut.info/api/get_all_phenotypes", body = list());
+pheno_01 <- POST("https://gmrepo.humangut.info/api/get_all_phenotypes", body = list());
 pheno_01_cont <- content(pheno_01);
 all_phenotypes <- fromJSON( xml_text( pheno_01_cont ));
 
@@ -67,7 +67,7 @@ all_phenotypes <- fromJSON( xml_text( pheno_01_cont ));
 str(all_phenotypes);
 head(all_phenotypes$phenotypes);
 ```
-The `data.frame` `phenotypes` in the retrieved list `all_phenotypes` (can be accessed using `all_phenotypes$phenotypes`) contains a list of phenotypes and related statistics as shown in http://gmrepo.humangut.info/phenotypes.
+The `data.frame` `phenotypes` in the retrieved list `all_phenotypes` (can be accessed using `all_phenotypes$phenotypes`) contains a list of phenotypes and related statistics as shown in https://gmrepo.humangut.info/phenotypes.
 
 ### Get statistics on a phenotype
 Using the corresponding MeSH ID  (e.g. `D006262` for `Health `), uses can first obtain some statistics information of the phenotype, including:
@@ -81,7 +81,7 @@ Using the corresponding MeSH ID  (e.g. `D006262` for `Health `), uses can first 
 ```R
 ## -- get summary information by mesh_id
 pheno_02_query <- list( "mesh_id" = "D006262");  ## -- to get statistics on MeSH ID D006262
-pheno_02 <- POST("http://gmrepo.humangut.info/api/getStatisticsByProjectsByMeshID", body = pheno_02_query, encode = "json");
+pheno_02 <- POST("https://gmrepo.humangut.info/api/getStatisticsByProjectsByMeshID", body = pheno_02_query, encode = "json");
 pheno_02_cont <- content( pheno_02 );
 phenotyp_stats <- fromJSON( xml_text( pheno_02_cont ));
 
@@ -97,7 +97,7 @@ Again the MeSH ID `D006262` will be needed as the input:
 ```R
 ## -- all associted species --
 ## -- please note only species that are found in >= 2 runs & with median relative abundance >= 0.01% will be retrieved
-pheno_03 <- POST("http://gmrepo.humangut.info/api/getAssociatedSpeciesByMeshID", body = list( "mesh_id" = "D006262"), encode = "json");
+pheno_03 <- POST("https://gmrepo.humangut.info/api/getAssociatedSpeciesByMeshID", body = list( "mesh_id" = "D006262"), encode = "json");
 pheno_03_cont <- content( pheno_03 );
 phenotyp_assoc_species <- fromJSON( xml_text( pheno_03_cont ));
 
@@ -112,7 +112,7 @@ head( phenotyp_assoc_species );
 ```R
 ## -- all associted genera --
 ## -- please note only genera that are found in >= 2 runs & with median relative abundance >= 0.01% will be retrieved
-pheno_04 <- POST("http://gmrepo.humangut.info/api/getAssociatedGeneraByMeshID", body = list( "mesh_id" = "D006262"), encode = "json");
+pheno_04 <- POST("https://gmrepo.humangut.info/api/getAssociatedGeneraByMeshID", body = list( "mesh_id" = "D006262"), encode = "json");
 pheno_04_cont <- content( pheno_04 );
 phenotyp_assoc_genera <- fromJSON( xml_text( pheno_04_cont ));
 
@@ -153,7 +153,7 @@ phenotyp_assoc_species %>% arrange( desc( species_prevalence ) ) %>% top_n( 10 )
 `output`: a `data.frame`
 ```R
 ## -- all associted projects --
-pheno_05 <- POST("http://gmrepo.humangut.info/api/getAssociatedProjectsByMeshID", body = list( "mesh_id" = "D006262"), encode = "json");
+pheno_05 <- POST("https://gmrepo.humangut.info/api/getAssociatedProjectsByMeshID", body = list( "mesh_id" = "D006262"), encode = "json");
 pheno_05_cont <- content( pheno_05 );
 phenotyp_assoc_pros <- fromJSON( xml_text( pheno_05_cont ));
 
@@ -172,7 +172,7 @@ First, count the number of runs associated with a phenotype:
 `output`: a `vector`
 ```R
 ## -- count associated runs --
-pheno_07 <- POST("http://gmrepo.humangut.info/api/countAssociatedRunsByPhenotypeMeshID", body = list( "mesh_id" = "D006262"), encode = "json");
+pheno_07 <- POST("https://gmrepo.humangut.info/api/countAssociatedRunsByPhenotypeMeshID", body = list( "mesh_id" = "D006262"), encode = "json");
 pheno_07_cont <- content( pheno_07 );
 phenotyp_nr_assoc_runs <- fromJSON( xml_text( pheno_07_cont ));
 
@@ -190,7 +190,7 @@ Then users can use a loop retrieve the associated runs, 100 runs at a time:
 ## use skip = 0, limit = 100 to retrieve the first 100 runs, then
 ##     skip = 100, limit = 100 to retrieve the next 100 runs ....
 params <- list( "mesh_id" = "D006262", "skip" = 0, "limit" = 100 );
-pheno_08 <- POST("http://gmrepo.humangut.info/api/getAssociatedRunsByPhenotypeMeshIDLimit", body = params, encode = "json");
+pheno_08 <- POST("https://gmrepo.humangut.info/api/getAssociatedRunsByPhenotypeMeshIDLimit", body = params, encode = "json");
 pheno_08_cont <- content( pheno_08 );
 phenotyp_a_page_of_assoc_runs <- fromJSON( xml_text( pheno_08_cont ));
 
@@ -205,7 +205,7 @@ To get the related information, two input parameters are required:
 
 ```R
 params <- list( "mesh_id" = "D003093", "ncbi_taxon_id" = "40520" );
-query <- POST("http://gmrepo.humangut.info/api/getMicrobeAbundancesByPhenotypeMeshIDAndNCBITaxonID", body = params, encode = "json");
+query <- POST("https://gmrepo.humangut.info/api/getMicrobeAbundancesByPhenotypeMeshIDAndNCBITaxonID", body = params, encode = "json");
 retrieved_contents <- content( query );
 data <- fromJSON( xml_text( retrieved_contents ));
 
@@ -222,7 +222,7 @@ The resulting `data` is a list containing:
 * `abundance_and_meta_data`: runs in which current taxon is found and related meta data,
 * `co_occurred_taxa`: cooccurred taxa of the taxon of interests in current phenotype
 
-See http://gmrepo.humangut.info/phenotypes/D003093/40520 for more details.
+See https://gmrepo.humangut.info/phenotypes/D003093/40520 for more details.
 
 ## Species/genera
 ### Get an overview of the species/genera
@@ -232,7 +232,7 @@ See http://gmrepo.humangut.info/phenotypes/D003093/40520 for more details.
 `output`: a `list`.
 ```R
 ### --- get all species and genera that presented in >= 2 runs with median relative abundance >= 0.01%
-query <- POST("http://gmrepo.humangut.info/api/get_all_gut_microbes", body = NULL, encode = "json");
+query <- POST("https://gmrepo.humangut.info/api/get_all_gut_microbes", body = NULL, encode = "json");
 retrieved_contents <- content( query );
 data <- fromJSON( xml_text( retrieved_contents ));
 
@@ -264,7 +264,7 @@ plot(density( data$all_species$nr_phenotypes ));
 plot(density( data$all_genus$nr_phenotypes ));
 ```
 
-See http://gmrepo.humangut.info/species for more details.
+See https://gmrepo.humangut.info/species for more details.
 
 ### Get summary information of the prevalence and relative abundance of a species/genus in all associated phenotypes
 
@@ -272,7 +272,7 @@ See http://gmrepo.humangut.info/species for more details.
 
 `data output`: a `data.frame`
 ```R
-query <- POST("http://gmrepo.humangut.info/api/getPhenotypesAndAbundanceSummaryOfAAssociatedTaxon", body = list( "ncbi_taxon_id" = 40520 ), encode = "json");
+query <- POST("https://gmrepo.humangut.info/api/getPhenotypesAndAbundanceSummaryOfAAssociatedTaxon", body = list( "ncbi_taxon_id" = 40520 ), encode = "json");
 retrieved_contents <- content( query );
 data <- fromJSON( xml_text( retrieved_contents ));
 
@@ -280,7 +280,7 @@ data <- fromJSON( xml_text( retrieved_contents ));
 head(data);
 ```
 
-See the first table at http://gmrepo.humangut.info/species/40520 for details.
+See the first table at https://gmrepo.humangut.info/species/40520 for details.
 
 ### Get detailed information of the prevalence and relative abundance of a species/genus in all associated phenotypes
 
@@ -288,7 +288,7 @@ See the first table at http://gmrepo.humangut.info/species/40520 for details.
 
 `data output`: a `list`
 ```R
-query <- POST("http://gmrepo.humangut.info/api/getAssociatedPhenotypesAndAbundancesOfATaxon", body = list( "ncbi_taxon_id" = 40520 ), encode = "json");
+query <- POST("https://gmrepo.humangut.info/api/getAssociatedPhenotypesAndAbundancesOfATaxon", body = list( "ncbi_taxon_id" = 40520 ), encode = "json");
 retrieved_contents <- content( query );
 data <- fromJSON( xml_text( retrieved_contents ));
 
@@ -300,7 +300,7 @@ The retrieved `data` is a list containing:
 * `taxon`: a list contains detailed information about this taxon, such as scientific name and taxonomic level,
 * `density_data_groupped`: a list of `data.frame`, each contains abundance information of the current taxon in an associated phenotype; the number of `data.frame` corresponds to the number of phenotypes the current taxon is associated with.
 
-The retrieved data can be used to generate the plots at http://gmrepo.humangut.info/species/40520.
+The retrieved data can be used to generate the plots at https://gmrepo.humangut.info/species/40520.
 
 ### Get relative species/genus abundances for a sample/run
 
@@ -308,7 +308,7 @@ The retrieved data can be used to generate the plots at http://gmrepo.humangut.i
 
 `output`: a list, see below:
 ```R
-query <- POST("http://gmrepo.humangut.info/api/getRunDetailsByRunID", body = list( "run_id" = "ERR475468" ), encode = "json");
+query <- POST("https://gmrepo.humangut.info/api/getRunDetailsByRunID", body = list( "run_id" = "ERR475468" ), encode = "json");
 retrieved_contents <- content( query );
 data <- fromJSON( xml_text( retrieved_contents ));
 
@@ -320,10 +320,10 @@ The retrieved `data` is a `list` containing:
 * `species`: a `data.frame` contains relative abundances of all species,
 * `genus`: a `data.frame` contains relative abundances of all genera.
 
-See http://gmrepo.humangut.info/data/run/ERR475468 for details.
+See https://gmrepo.humangut.info/data/run/ERR475468 for details.
 
 ## Projects and runs
 Although it is possible to download projects and runs through our RESTful API, it is highly recommended to download them from our website, or use the following URLs:
-* download all projects: http://gmrepo.humangut.info/Downloads/AllSummaryData/all_projects_metadata.tsv.gz,
-* download all runs associated with a project: http://gmrepo.humangut.info/Downloads/RunsByProjectID/all_runs_in_project_PRJEB6070.tsv.gz; please replace `PRJEB6070` with any other project ID of interests,
-* other downloads please consult the `Data downloads` section of the Help page: http://gmrepo.humangut.info/help.
+* download all projects: https://gmrepo.humangut.info/Downloads/AllSummaryData/all_projects_metadata.tsv.gz,
+* download all runs associated with a project: https://gmrepo.humangut.info/Downloads/RunsByProjectID/all_runs_in_project_PRJEB6070.tsv.gz; please replace `PRJEB6070` with any other project ID of interests,
+* other downloads please consult the `Data downloads` section of the Help page: https://gmrepo.humangut.info/help.
