@@ -94,16 +94,16 @@ from pandas.core.frame import DataFrame
 `output`: a `DataFrame`
 ```python
 ### -- get all phenotypes  --
-url = 'http://gmrepo.humangut.info/api/get_all_phenotypes'
+url = 'https://gmrepo.humangut.info/api/get_all_phenotypes'
 pheno_01 = requests.post(url, data={})
 pheno_01_cont = pheno_01.json().get('phenotypes')
 
 ## -- a DateFrame --
 phenotypes = DataFrame(pheno_01_cont)
 ```
-The `list` `pheno_01_cont` contains a list of phenotypes and related statistics as shown in http://gmrepo.humangut.info/phenotypes.
+The `list` `pheno_01_cont` contains a list of phenotypes and related statistics as shown in https://gmrepo.humangut.info/phenotypes.
 
-The `data.frame` `all_phenotypes` contains the information of phenotypes and related statistics as shown in http://gmrepo.humangut.info/phenotypes.
+The `data.frame` `all_phenotypes` contains the information of phenotypes and related statistics as shown in https://gmrepo.humangut.info/phenotypes.
 
 ### Get statistics on a phenotype
 Using the corresponding MeSH ID  (e.g. `D006262` for `Health `), uses can first obtain some statistics information of the phenotype, including:
@@ -117,7 +117,7 @@ Using the corresponding MeSH ID  (e.g. `D006262` for `Health `), uses can first 
 ```python
 ## -- get summary information by mesh_id
 pheno_02_query = {'mesh_id':'D006262'}  ## -- to get statistics on MeSH ID D006262
-url = 'http://gmrepo.humangut.info/api/getStatisticsByProjectsByMeshID'
+url = 'https://gmrepo.humangut.info/api/getStatisticsByProjectsByMeshID'
 pheno_02 = requests.post(url, data=json.dumps(pheno_02_query))
 pheno_02_cont = pheno_02.json()
 
@@ -132,7 +132,7 @@ Again the MeSH ID `D006262` will be needed as the input:
 `output`: a `data.frame`
 ```python
 pheno_03_query = {'mesh_id':'D006262'}  ## -- to get statistics on MeSH ID D006262
-url = 'http://gmrepo.humangut.info/api/getAssociatedSpeciesByMeshID'
+url = 'https://gmrepo.humangut.info/api/getAssociatedSpeciesByMeshID'
 pheno_03 = requests.post(url, data=json.dumps(pheno_03_query))
 pheno_03_cont = pheno_03.json()
 
@@ -149,7 +149,7 @@ list(phenotyp_assoc_species)
 `output`: a `data.frame`
 ```python
 pheno_04_query = {'mesh_id':'D006262'}  ## -- to get statistics on MeSH ID D006262
-url = 'http://gmrepo.humangut.info/api/getAssociatedGeneraByMeshID'
+url = 'https://gmrepo.humangut.info/api/getAssociatedGeneraByMeshID'
 pheno_04 = requests.post(url, data=json.dumps(pheno_04_query))
 pheno_04_cont = pheno_04.json()
 
@@ -188,7 +188,7 @@ fig.savefig('species_prevalence.png')
 ```python
 ## -- all associted projects --
 pheno_05_query = {'mesh_id':'D006262'}
-url = 'http://gmrepo.humangut.info/api/getAssociatedProjectsByMeshID'
+url = 'https://gmrepo.humangut.info/api/getAssociatedProjectsByMeshID'
 pheno_05 = requests.post(url, data=json.dumps(pheno_05_query))
 pheno_05_cont = pheno_05.json()
 
@@ -211,7 +211,7 @@ First, count the number of runs associated with a phenotype:
 ```python
 ## -- count associated runs --
 pheno_06_query = {'mesh_id':'D006262'}  
-url = 'http://gmrepo.humangut.info/api/countAssociatedRunsByPhenotypeMeshID'
+url = 'https://gmrepo.humangut.info/api/countAssociatedRunsByPhenotypeMeshID'
 pheno_06 = requests.post(url, data=json.dumps(pheno_06_query))
 pheno_06_cont = pheno_06.json()
 
@@ -231,7 +231,7 @@ Then users can use a loop retrieve the associated runs, 100 runs at a time:
 ##     skip = 100, limit = 100 to retrieve the next 100 runs ....
 
 pheno_07_query = {'mesh_id':'D006262',"skip":0, "limit":100}  
-url = 'http://gmrepo.humangut.info/api/getAssociatedRunsByPhenotypeMeshIDLimit'
+url = 'https://gmrepo.humangut.info/api/getAssociatedRunsByPhenotypeMeshIDLimit'
 pheno_07 = requests.post(url, data=json.dumps(pheno_07_query))
 pheno_07_cont = pheno_07.json()
 
@@ -246,7 +246,7 @@ To get the related information, two input parameters are required:
 
 ```python
 data_query = {'mesh_id':'D003093',"ncbi_taxon_id" : "40520"}  ## -- to get statistics on MeSH ID D006262
-url = 'http://gmrepo.humangut.info/api/getMicrobeAbundancesByPhenotypeMeshIDAndNCBITaxonID'
+url = 'https://gmrepo.humangut.info/api/getMicrobeAbundancesByPhenotypeMeshIDAndNCBITaxonID'
 data = requests.post(url, data=json.dumps(data_query))
 
 ## --get DataFrames
@@ -263,7 +263,7 @@ The resulting `data` is a list containing:
 * `abundance_and_meta_data`: runs in which current taxon is found and related meta data,
 * `co_occurred_taxa`: cooccurred taxa of the taxon of interests in current phenotype
 
-See http://gmrepo.humangut.info/phenotypes/D003093/40520 for more details.
+See https://gmrepo.humangut.info/phenotypes/D003093/40520 for more details.
 
 ## Species/genera
 ### Get an overview of the species/genera
@@ -273,7 +273,7 @@ See http://gmrepo.humangut.info/phenotypes/D003093/40520 for more details.
 `output`: a `list`.
 ```python
 ### --- get all species and genera that presented in >= 2 runs with median relative abundance >= 0.01%
-url = 'http://gmrepo.humangut.info/api/get_all_gut_microbes'
+url = 'https://gmrepo.humangut.info/api/get_all_gut_microbes'
 data = requests.post(url, data={}).json()
 
 ## --get DataFrames
@@ -312,7 +312,7 @@ fig = DataFrame(data.get('all_species')).pct_of_all_samples.plot(kind='density')
 fig.savefig('species_pct_of_all_samples.png')
 ```
 
-See http://gmrepo.humangut.info/species for more details.
+See https://gmrepo.humangut.info/species for more details.
 
 ### Get summary information of the prevalence and relative abundance of a species/genus in all associated phenotypes
 
@@ -321,11 +321,11 @@ See http://gmrepo.humangut.info/species for more details.
 `data output`: a `data.frame`
 ```python
 query = {"ncbi_taxon_id":40520}  
-url = 'http://gmrepo.humangut.info/api/getPhenotypesAndAbundanceSummaryOfAAssociatedTaxon'
+url = 'https://gmrepo.humangut.info/api/getPhenotypesAndAbundanceSummaryOfAAssociatedTaxon'
 data = DataFrame(requests.post(url, data=json.dumps(query)).json().get('phenotypes_associated_with_taxon'))
 ```
 
-See the first table at http://gmrepo.humangut.info/species/40520 for details.
+See the first table at https://gmrepo.humangut.info/species/40520 for details.
 
 ### Get detailed information of the prevalence and relative abundance of a species/genus in all associated phenotypes
 
@@ -334,7 +334,7 @@ See the first table at http://gmrepo.humangut.info/species/40520 for details.
 `data output`: a bunch of `DataFrames`
 ```python
 query = {"ncbi_taxon_id":40520}  
-url = 'http://gmrepo.humangut.info/api/getAssociatedPhenotypesAndAbundancesOfATaxon'
+url = 'https://gmrepo.humangut.info/api/getAssociatedPhenotypesAndAbundancesOfATaxon'
 data = requests.post(url, data=json.dumps(query)).json()
 
 ## --get DataFrames
@@ -347,7 +347,7 @@ The retrieved `data` is a list containing:
 * `taxon`: a list contains detailed information about this taxon, such as scientific name and taxonomic level,
 * `density_data_groupped`: a list of `data.frame`, each contains abundance information of the current taxon in an associated phenotype; the number of `data.frame` corresponds to the number of phenotypes the current taxon is associated with.
 
-The retrieved data can be used to generate the plots at http://gmrepo.humangut.info/species/40520.
+The retrieved data can be used to generate the plots at https://gmrepo.humangut.info/species/40520.
 
 ### Get relative species/genus abundances for a sample/run
 
@@ -356,7 +356,7 @@ The retrieved data can be used to generate the plots at http://gmrepo.humangut.i
 `output`: a list, see below:
 ```python
 query = {"run_id":"ERR475468"}  
-url = 'http://gmrepo.humangut.info/api/getRunDetailsByRunID'
+url = 'https://gmrepo.humangut.info/api/getRunDetailsByRunID'
 data = requests.post(url, data=json.dumps(query)).json()
 
 ## --get run List
@@ -371,10 +371,10 @@ The retrieved `data` is a `list` containing:
 * `species`: a `data.frame` contains relative abundances of all species,
 * `genus`: a `data.frame` contains relative abundances of all genera.
 
-See http://gmrepo.humangut.info/data/run/ERR475468 for details.
+See https://gmrepo.humangut.info/data/run/ERR475468 for details.
 
 ## Projects and runs
 Although it is possible to download projects and runs through our RESTful API, it is highly recommended to download them from our website, or use the following URLs:
-* download all projects: http://gmrepo.humangut.info/Downloads/AllSummaryData/all_projects_metadata.tsv.gz,
-* download all runs associated with a project: http://gmrepo.humangut.info/Downloads/RunsByProjectID/all_runs_in_project_PRJEB6070.tsv.gz; please replace `PRJEB6070` with any other project ID of interests,
-* other downloads please consult the `Data downloads` section of the Help page: http://gmrepo.humangut.info/help.
+* download all projects: https://gmrepo.humangut.info/Downloads/AllSummaryData/all_projects_metadata.tsv.gz,
+* download all runs associated with a project: https://gmrepo.humangut.info/Downloads/RunsByProjectID/all_runs_in_project_PRJEB6070.tsv.gz; please replace `PRJEB6070` with any other project ID of interests,
+* other downloads please consult the `Data downloads` section of the Help page: https://gmrepo.humangut.info/help.
