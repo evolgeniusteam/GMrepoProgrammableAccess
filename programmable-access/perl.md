@@ -72,7 +72,7 @@ my $ua = LWP::UserAgent->new;
 `output`: an `array`
 ```Perl
 ### -- get all phenotypes  --
-my $url1 = 'http://gmrepo.humangut.info/api/get_all_phenotypes';
+my $url1 = 'https://gmrepo.humangut.info/api/get_all_phenotypes';
 my $req1 = HTTP::Request->new('POST' => $url1);
 my $all_phenotypes = decode_json($ua->request($req1)->content())->{'phenotypes'};
 
@@ -85,7 +85,7 @@ my @phenotypes = map{my %h;@h{@col}=@$_{@col};\%h}@$all_phenotypes[0..($row-1)];
 print "print the top 5 elements:\n";
 print Dumper(@phenotypes[0..4]);
 ```
-The `array` `phenotypes` contains phenotypes and related statistics as shown in http://gmrepo.humangut.info/phenotypes, the elements of '@phenotypes' are anonymous hashes.
+The `array` `phenotypes` contains phenotypes and related statistics as shown in https://gmrepo.humangut.info/phenotypes, the elements of '@phenotypes' are anonymous hashes.
 
 ### Get statistics on a phenotype
 Using the corresponding MeSH ID  (e.g. `D006262` for `Health `), uses can first obtain some statistics information of the phenotype, including:
@@ -98,7 +98,7 @@ Using the corresponding MeSH ID  (e.g. `D006262` for `Health `), uses can first 
 `output`: a `scalar`
 ```Perl
 ## -- get summary information by mesh_id
-my $url2 = 'http://gmrepo.humangut.info/api/getStatisticsByProjectsByMeshID';
+my $url2 = 'https://gmrepo.humangut.info/api/getStatisticsByProjectsByMeshID';
 my $res2 = $ua->post($url2,Content => '{"mesh_id": "D006262"}');## -- to get statistics on MeSH ID D006262
 my $phenotype_stats = decode_json($res2->content());
 
@@ -116,7 +116,7 @@ Again the MeSH ID `D006262` will be needed as the input:
 ```Perl
 ## -- all associted species --
 ## -- please note only species that are found in >= 2 runs & with median relative abundance >= 0.01% will be retrieved
-my $url3 = 'http://gmrepo.humangut.info/api/getAssociatedSpeciesByMeshID';
+my $url3 = 'https://gmrepo.humangut.info/api/getAssociatedSpeciesByMeshID';
 my $res3 = $ua->post($url3,Content => '{"mesh_id": "D006262"}');
 my $phenotype_assoc_species = decode_json($res3->content());
 
@@ -133,7 +133,7 @@ print Dumper(@$phenotype_assoc_species[0..4]);
 ```Perl
 ## -- all associted genera --
 ## -- please note only genera that are found in >= 2 runs & with median relative abundance >= 0.01% will be retrieved
-my $url4 = 'http://gmrepo.humangut.info/api/getAssociatedGeneraByMeshID';
+my $url4 = 'https://gmrepo.humangut.info/api/getAssociatedGeneraByMeshID';
 my $res4 = $ua->post($url4,Content => '{"mesh_id": "D006262"}');
 my $phenotype_assoc_genera = decode_json($res4->content());
 
@@ -163,7 +163,7 @@ my @genera_prevalence = map {
 `output`: a `scalar`
 ```Perl
 ## -- all associted projects --
-my $url6 = 'http://gmrepo.humangut.info/api/getAssociatedProjectsByMeshID';
+my $url6 = 'https://gmrepo.humangut.info/api/getAssociatedProjectsByMeshID';
 my $res6 = $ua->post($url6,Content => '{"mesh_id": "D006262"}');
 my $phenotype_assoc_pros = decode_json($res6->content());
 
@@ -183,7 +183,7 @@ First, count the number of runs associated with a phenotype:
 `output`: a `scalar`
 ```Perl
 ## -- count associated runs --
-my $url7 = 'http://gmrepo.humangut.info/api/countAssociatedRunsByPhenotypeMeshID';
+my $url7 = 'https://gmrepo.humangut.info/api/countAssociatedRunsByPhenotypeMeshID';
 my $res7 = $ua->post($url7,Content => '{"mesh_id": "D006262"}');
 my $phenotyp_nr_assoc_runs = decode_json($res7->content());
 
@@ -200,7 +200,7 @@ Then users can use a loop retrieve the associated runs, 100 runs at a time:
 ## -- get all associted runs --
 ## use skip = 0, limit = 100 to retrieve the first 100 runs, then
 ##     skip = 100, limit = 100 to retrieve the next 100 runs ....
-my $url8 = 'http://gmrepo.humangut.info/api/getAssociatedRunsByPhenotypeMeshIDLimit';
+my $url8 = 'https://gmrepo.humangut.info/api/getAssociatedRunsByPhenotypeMeshIDLimit';
 my $res8 = $ua->post($url8,Content => '{"mesh_id": "D006262", "skip": 0, "limit": 100}');
 my $phenotyp_a_page_of_assoc_runs = decode_json($res8->content());
 
@@ -215,7 +215,7 @@ To get the related information, two input parameters are required:
 * NCBI taxonomy ID of the species/genus of interests, e.g. `40520` for `Blautia obeum (species)`.
 
 ```Perl
-my $url9 = 'http://gmrepo.humangut.info/api/getMicrobeAbundancesByPhenotypeMeshIDAndNCBITaxonID';
+my $url9 = 'https://gmrepo.humangut.info/api/getMicrobeAbundancesByPhenotypeMeshIDAndNCBITaxonID';
 my $res9 = $ua->post($url9,Content => '{"mesh_id": "D003093","ncbi_taxon_id": "40520"}');
 my $data = decode_json($res9->content());
 
@@ -233,7 +233,7 @@ The resulting `$data` is a reference to a hash of hashes containing:
 * `abundance_and_meta_data`: runs in which current taxon is found and related meta data,
 * `co_occurred_taxa`: cooccurred taxa of the taxon of interests in current phenotype
 
-See http://gmrepo.humangut.info/phenotypes/D003093/40520 for more details.
+See https://gmrepo.humangut.info/phenotypes/D003093/40520 for more details.
 
 ## Species/genera
 ### Get an overview of the species/genera
@@ -243,7 +243,7 @@ See http://gmrepo.humangut.info/phenotypes/D003093/40520 for more details.
 `output`: a `scalar`.
 ```Perl
 ### --- get all species and genera that presented in >= 2 runs with median relative abundance >= 0.01%
-my $url10 = 'http://gmrepo.humangut.info/api/get_all_gut_microbes';
+my $url10 = 'https://gmrepo.humangut.info/api/get_all_gut_microbes';
 my $req10 = HTTP::Request->new('POST' => $url10);
 my $data10 = decode_json($ua->request($req10)->content());
 
@@ -261,7 +261,7 @@ The retrieved `data` is a list containing:
   * `all_genus_count`: nr. all genera,
   * `retrieved_genus_count`: nr. genera in the `array`: `all_genus`.
 
-With the retrieved data, users can plot the **species prevalence in phenotypes** and **species prevalence in samples**, as shown at http://gmrepo.humangut.info/species.
+With the retrieved data, users can plot the **species prevalence in phenotypes** and **species prevalence in samples**, as shown at https://gmrepo.humangut.info/species.
 
 ### Get summary information of the prevalence and relative abundance of a species/genus in all associated phenotypes
 
@@ -269,7 +269,7 @@ With the retrieved data, users can plot the **species prevalence in phenotypes**
 
 `data output`: a `scalar`
 ```Perl
-my $url12 = 'http://gmrepo.humangut.info/api/getPhenotypesAndAbundanceSummaryOfAAssociatedTaxon';
+my $url12 = 'https://gmrepo.humangut.info/api/getPhenotypesAndAbundanceSummaryOfAAssociatedTaxon';
 my $res12 = $ua->post($url12,Content => '{"ncbi_taxon_id": "40520"}');
 my $data12 = decode_json($res12->content())->{'phenotypes_associated_with_taxon'};
 
@@ -278,7 +278,7 @@ print "print the top 5 elements:\n";
 print Dumper(@$data12[0..4]);
 ```
 
-See the first table at http://gmrepo.humangut.info/species/40520 for details.
+See the first table at https://gmrepo.humangut.info/species/40520 for details.
 
 ### Get detailed information of the prevalence and relative abundance of a species/genus in all associated phenotypes
 
@@ -286,7 +286,7 @@ See the first table at http://gmrepo.humangut.info/species/40520 for details.
 
 `data output`: a `scalar`
 ```Perl
-my $url13 = 'http://gmrepo.humangut.info/api/getAssociatedPhenotypesAndAbundancesOfATaxon';
+my $url13 = 'https://gmrepo.humangut.info/api/getAssociatedPhenotypesAndAbundancesOfATaxon';
 my $res13 = $ua->post($url13,Content => '{"ncbi_taxon_id": "40520"}');
 my $data13 = decode_json($res13->content());
 
@@ -299,7 +299,7 @@ The retrieved `$data` is a reference to a hash of hashes containing:
 * `taxon`: the value corresponding to this key contains detailed information about this taxon, such as scientific name and taxonomic level,
 * `density_data_groupped`: the value corresponding to this key is a reference to a hash, contains abundance information of the current taxon in an associated phenotype; the number of key-value pairs corresponds to the number of phenotypes the current taxon is associated with.
 
-The retrieved data can be used to generate the plots at http://gmrepo.humangut.info/species/40520.
+The retrieved data can be used to generate the plots at https://gmrepo.humangut.info/species/40520.
 
 ### Get relative species/genus abundances for a sample/run
 
@@ -307,7 +307,7 @@ The retrieved data can be used to generate the plots at http://gmrepo.humangut.i
 
 `output`: a `scalar`, see below:
 ```Perl
-my $url14 = 'http://gmrepo.humangut.info/api/getRunDetailsByRunID';
+my $url14 = 'https://gmrepo.humangut.info/api/getRunDetailsByRunID';
 my $res14 = $ua->post($url14,Content => '{"run_id":"ERR475468"}');
 my $data14 = decode_json($res14->content());
 
@@ -320,10 +320,10 @@ The retrieved `$data` is a reference to a hash of hashes containing:
 * `species`: the value corresponding to this key is a reference to an array, contains relative abundances of all species,
 * `genus`: the value corresponding to this key is a reference to an array, contains relative abundances of all genera.
 
-See http://gmrepo.humangut.info/data/run/ERR475468 for details.
+See https://gmrepo.humangut.info/data/run/ERR475468 for details.
 
 ## Projects and runs
 Although it is possible to download projects and runs through our RESTful API, it is highly recommended to download them from our website, or use the following URLs:
-* download all projects: http://gmrepo.humangut.info/Downloads/AllSummaryData/all_projects_metadata.tsv.gz,
-* download all runs associated with a project: http://gmrepo.humangut.info/Downloads/RunsByProjectID/all_runs_in_project_PRJEB6070.tsv.gz; please replace `PRJEB6070` with any other project ID of interests,
-* other downloads please consult the `Data downloads` section of the Help page: http://gmrepo.humangut.info/help.
+* download all projects: https://gmrepo.humangut.info/Downloads/AllSummaryData/all_projects_metadata.tsv.gz,
+* download all runs associated with a project: https://gmrepo.humangut.info/Downloads/RunsByProjectID/all_runs_in_project_PRJEB6070.tsv.gz; please replace `PRJEB6070` with any other project ID of interests,
+* other downloads please consult the `Data downloads` section of the Help page: https://gmrepo.humangut.info/help.
