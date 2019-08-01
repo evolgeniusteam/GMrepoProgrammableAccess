@@ -1,7 +1,7 @@
 # Programmable access to [GMrepo](https://gmrepo.humangut.info/home)
 ![](/images/gmrepo-logo-small.png)
 
-[**GMrepo**](https://gmrepo.humangut.info/home) is a curated database of consistently annotated human gut metagenomics.
+[**GMrepo**](https://gmrepo.humangut.info/home) is a curated database of consistently annotated human gut metagenomes.
 Its main features include:
 * extensive manual curation of meta-data of gut samples/runs,
 * grouping samples/runs according to their associated human phenotypes (i.e. health and diseases),
