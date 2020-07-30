@@ -304,11 +304,13 @@ The retrieved data can be used to generate the plots at https://gmrepo.humangut.
 
 ### Get relative species/genus abundances for a sample/run
 
+Two APIs are available here, namely `getRunDetailsByRunID` and `getFullTaxonomicProfileByRunID`. The usages are the same (see below). However, `getFullTaxonomicProfileByRunID` will produce the full taxonomic profiles at species and genus levels, while `getRunDetailsByRunID` only produces the top ten most abundant ones, and merge the others into a 'Others' category.
+
 `input`: run ID, e.g. `ERR475468`,
 
 `output`: a list, see below:
 ```R
-query <- POST("https://gmrepo.humangut.info/api/getRunDetailsByRunID", body = list( "run_id" = "ERR475468" ), encode = "json");
+query <- POST("https://gmrepo.humangut.info/api/getFullTaxonomicProfileByRunID", body = list( "run_id" = "ERR475468" ), encode = "json");
 retrieved_contents <- content( query );
 data <- fromJSON( xml_text( retrieved_contents ));
 
