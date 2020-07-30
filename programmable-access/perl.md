@@ -303,11 +303,13 @@ The retrieved data can be used to generate the plots at https://gmrepo.humangut.
 
 ### Get relative species/genus abundances for a sample/run
 
+Two APIs are available here, namely `getRunDetailsByRunID` and `getFullTaxonomicProfileByRunID`. The usages are the same (see below). However, `getFullTaxonomicProfileByRunID` will produce the full taxonomic profiles at species and genus levels, while `getRunDetailsByRunID` only produces the top ten most abundant ones, and merge the others into a 'Others' category.
+
 `input`: run ID, e.g. `ERR475468`,
 
 `output`: a `scalar`, see below:
 ```Perl
-my $url14 = 'https://gmrepo.humangut.info/api/getRunDetailsByRunID';
+my $url14 = 'https://gmrepo.humangut.info/api/getFullTaxonomicProfileByRunID';
 my $res14 = $ua->post($url14,Content => '{"run_id":"ERR475468"}');
 my $data14 = decode_json($res14->content());
 
