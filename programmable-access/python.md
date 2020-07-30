@@ -240,6 +240,7 @@ phenotyp_a_page_of_assoc_runs = DataFrame(pheno_07.json())
 print(phenotyp_a_page_of_assoc_runs)
 ```
 ### Get relative species/genus abundances in samples/runs associated with a phenotype
+
 To get the related information, two input parameters are required:
 * MeSH ID of interests, e.g. `D003093` for `Colitis, Ulcerative`
 * NCBI taxonomy ID of the species/genus of interests, e.g. `40520` for `Blautia obeum (species)`.
@@ -351,12 +352,14 @@ The retrieved data can be used to generate the plots at https://gmrepo.humangut.
 
 ### Get relative species/genus abundances for a sample/run
 
+Two APIs are available here, namely `getRunDetailsByRunID` and `getFullTaxonomicProfileByRunID`. The usages are the same (see below). However, `getFullTaxonomicProfileByRunID` will produce the full taxonomic profiles at species and genus levels, while `getRunDetailsByRunID` only produces the top ten most abundant ones, and merge the others into a 'Others' category.
+
 `input`: run ID, e.g. `ERR475468`,
 
 `output`: a list, see below:
 ```python
 query = {"run_id":"ERR475468"}  
-url = 'https://gmrepo.humangut.info/api/getRunDetailsByRunID'
+url = 'https://gmrepo.humangut.info/api/getFullTaxonomicProfileByRunID'
 data = requests.post(url, data=json.dumps(query)).json()
 
 ## --get run List
