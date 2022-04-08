@@ -18,7 +18,8 @@ Access to GMrepo using R through RESTful APIs
       - [Get an overview of the species/genera](#get-an-overview-of-the-speciesgenera)   
       - [Get summary information of the prevalence and relative abundance of a species/genus in all associated phenotypes](#get-summary-information-of-the-prevalence-and-relative-abundance-of-a-speciesgenus-in-all-associated-phenotypes)   
       - [Get detailed information of the prevalence and relative abundance of a species/genus in all associated phenotypes](#get-detailed-information-of-the-prevalence-and-relative-abundance-of-a-speciesgenus-in-all-associated-phenotypes)   
-      - [Get relative species/genus abundances for a sample/run](#get-relative-speciesgenus-abundances-for-a-samplerun)   
+      - [Get relative species/genus abundances for a sample/run](#get-relative-speciesgenus-abundances-for-a-samplerun)  
+      - [Get relative species/genus abundances for a project](#get-relative-speciesgenus-abundances-for-a-project) 
    - [Projects and runs](#projects-and-runs)   
 
 <!-- /MDTOC -->
@@ -323,6 +324,31 @@ The retrieved `data` is a `list` containing:
 * `genus`: a `data.frame` contains relative abundances of all genera.
 
 See https://gmrepo.humangut.info/data/run/ERR475468 for details.
+
+### Get relative species/genus abundances for a project
+`data input`: project id, e.g. `PRJNA489760`, and a MeSH ID
+
+`data output`: a `list`
+```R
+# Get relative species/genus abundances for all phenotypes
+params <- list( "project_id"="PRJNA489760","mesh_id" = "" )
+
+# Get relative species/genus abundances for one of the phenotype in the project
+params <- list( "project_id"="PRJNA489760","mesh_id" = "D006262" )
+
+# Query data
+query <- POST("https://gmrepo.humangut.info/api/getMicrobeAbundancesByPhenotypeMeshIDAndProjectID", body = params, encode = "json")
+retrieved_contents <- content( query )
+data <- fromJSON( xml_text( retrieved_contents ))
+
+## --- a list --
+str(data);
+```
+The retrieved `data` is a `list` containing:
+* `project_info`: a `list` contains project information,
+* `disease_info`: a `list` contains disease infromation,
+* `abundance_and_meta_data`: a `data.frame` contains relative abundances of the project.
+
 
 ## Projects and runs
 Although it is possible to download projects and runs through our RESTful API, it is highly recommended to download them from our website, or use the following URLs:
