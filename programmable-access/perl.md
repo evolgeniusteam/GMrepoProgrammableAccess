@@ -345,9 +345,9 @@ print join(",",keys %{$data15},"\n");
 
 ```
 The retrieved `data` is a `list` containing:
-* `project_info`:the value corresponding to this key is a reference to a hash, contains project information
-* `disease_info`:the value corresponding to this key is a reference to a hash, contains disease information
-* `abundance_and_meta_data`:the value corresponding to this key is a reference to an array, contains relative abundances of the project.
+* `project_info`: the value corresponding to this key is a reference to a hash, contains project information
+* `disease_info`: the value corresponding to this key is a reference to a hash, contains disease information
+* `abundance_and_meta_data`: the value corresponding to this key is a reference to an array, contains relative abundances of the project.
 
 ## Projects and runs
 Although it is possible to download projects and runs through our RESTful API, it is highly recommended to download them from our website, or use the following URLs:
