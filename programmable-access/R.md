@@ -333,7 +333,7 @@ See https://gmrepo.humangut.info/data/run/ERR475468 for details.
 # Get relative species/genus abundances for all phenotypes
 params <- list( "project_id"="PRJNA489760","mesh_id" = "" )
 
-# Get relative species/genus abundances for a phenotype
+# Get relative species/genus abundances for one of the phenotype in the project
 params <- list( "project_id"="PRJNA489760","mesh_id" = "D006262" )
 
 # Query data
@@ -344,7 +344,10 @@ data <- fromJSON( xml_text( retrieved_contents ))
 ## --- a list --
 str(data);
 ```
-
+The retrieved `data` is a `list` containing:
+* `project_info`: a `list` contains project information,
+* `disease_info`: a `list` contains disease infromation,
+* `abundance_and_meta_data`: a `data.frame` contains relative abundances of the project.
 
 
 ## Projects and runs
