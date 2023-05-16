@@ -11,7 +11,8 @@ Access to GMrepo using R through RESTful APIs
       - [Get associated species of a phenotype](#get-associated-species-of-a-phenotype)   
       - [Get associated genera of a phenotype](#get-associated-genera-of-a-phenotype)   
       - [Calculate species/genera prevalence](#calculate-speciesgenera-prevalence)   
-      - [Get associated projects](#get-associated-projects)   
+      - [Get associated projects](#get-associated-projects)
+      - [Get curated projects](#get-curated-projects)
       - [Get associated runs](#get-associated-runs)   
       - [Get relative species/genus abundances in samples/runs associated with a phenotype](#get-relative-speciesgenus-abundances-in-samplesruns-associated-with-a-phenotype)   
    - [Species/genera](#speciesgenera)   
@@ -162,6 +163,21 @@ phenotyp_assoc_pros <- fromJSON( xml_text( pheno_05_cont ));
 head( phenotyp_assoc_pros );
 ```
 Please note very often a project may contain samples/runs of multiple phenotypes.
+
+### Get curated projects
+
+`input`: NULL,
+
+`output`: a `data.frame`
+```R
+## -- all associted projects --
+query <- POST("https://gmrepo.humangut.info/api/getCuratedProjectsList", body = list(), encode = "json");
+retrieved_contents <- content( query );
+curated_pros <- fromJSON( xml_text( retrieved_contents ));
+
+## -- the resulting variable is a data.frame --
+head( curated_pros );
+```
 
 ### Get associated runs
 Some phenotypes are associated with tens of thousands of runs (e.g. `Health (D006262)`) that are too many to be retrieved with one call. Therefore it may take a two-step procedure to retrieve all runs associated with phenotype.
