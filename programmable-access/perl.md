@@ -11,7 +11,8 @@ Access to GMrepo using Perl through RESTful APIs
       - [Get associated species of a phenotype](#get-associated-species-of-a-phenotype)   
       - [Get associated genera of a phenotype](#get-associated-genera-of-a-phenotype)   
       - [Calculate species/genera prevalence](#calculate-speciesgenera-prevalence)   
-      - [Get associated projects](#get-associated-projects)   
+      - [Get associated projects](#get-associated-projects)
+      - [Get curated projects](#get-curated-projects)
       - [Get associated runs](#get-associated-runs)   
       - [Get relative species/genus abundances in samples/runs associated with a phenotype](#get-relative-speciesgenus-abundances-in-samplesruns-associated-with-a-phenotype)   
    - [Species/genera](#speciesgenera)   
@@ -173,6 +174,23 @@ print "print the top 5 elements:\n";
 print Dumper(@$phenotype_assoc_pros[0..4]);
 ```
 Please note very often a project may contain samples/runs of multiple phenotypes.
+
+### Get curated projects
+
+`input`: NULL,
+
+`output`: a `scalar`
+```Perl
+## -- all associted projects --
+my $url6 = 'https://gmrepo.humangut.info/api/getCuratedProjectsList';
+my $res6 = $ua->post($url6,Content => '{}');
+my $curated_pros = decode_json($res6->content());
+
+### -- the resulting variable is a reference to an array of hashes
+print "print the top 5 elements:\n";
+print Dumper(@$curated_pros[0..4]);
+```
+
 
 ### Get associated runs
 Some phenotypes are associated with tens of thousands of runs (e.g. `Health (D006262)`) that are too many to be retrieved with one call. Therefore it may take a two-step procedure to retrieve all runs associated with phenotype.
