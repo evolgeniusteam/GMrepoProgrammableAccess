@@ -12,6 +12,7 @@ Access to GMrepo using python through RESTful APIs
       - [Get associated genera of a phenotype](#get-associated-genera-of-a-phenotype)   
       - [Calculate species/genera prevalence](#calculate-speciesgenera-prevalence)   
       - [Get associated projects](#get-associated-projects)   
+      - [Get curated projects](#get-curated-projects)
       - [Get associated runs](#get-associated-runs)   
       - [Get relative species/genus abundances in samples/runs associated with a phenotype](#get-relative-speciesgenus-abundances-in-samplesruns-associated-with-a-phenotype)   
    - [Species/genera](#speciesgenera)   
@@ -200,6 +201,24 @@ phenotyp_assoc_pros = DataFrame(pheno_05.json())
 list(phenotyp_assoc_pros)
 ```
 Please note very often a project may contain samples/runs of multiple phenotypes.
+
+### Get curated projects
+
+`input`: NULL,
+
+`output`: a `data.frame`
+```python
+## -- all curated projects --
+query = {}
+url = 'https://gmrepo.humangut.info/api/getCuratedProjectsList'
+content = requests.post(url, data=json.dumps(query))
+
+## --get DataFrame
+curated_pros = DataFrame(content.json())
+
+## --show data header of the resulting DataFrame
+list(curated_pros)
+```
 
 ### Get associated runs
 Some phenotypes are associated with tens of thousands of runs (e.g. `Health (D006262)`) that are too many to be retrieved with one call. Therefore it may take a two-step procedure to retrieve all runs associated with phenotype.
